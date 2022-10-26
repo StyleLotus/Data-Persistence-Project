@@ -12,16 +12,12 @@ public class PassData : MonoBehaviour
 
     public static PassData instance;
     public string playerName;
+    public string newName;
     public int points;
     public string highscoreText;
 
+    [SerializeField]public Text username_field;
 
-    [SerializeField] Text username_field;
-
-    private void Start()
-    {
-
-    }
     void Awake()
     {
         if (instance != null)
@@ -39,7 +35,10 @@ public class PassData : MonoBehaviour
     public void StartNew()
     {
         SceneManager.LoadScene(1);
-        playerName = username_field.text.ToString();
+
+        newName = username_field.text;
+
+        Debug.Log(newName);
 
         LoadAll();
     }
@@ -50,12 +49,14 @@ public class PassData : MonoBehaviour
     {
         public string playerName;
         public int points;
+        public string highscoreText;
     }
     public void SaveAll()
     {
         SaveData data = new SaveData();
         data.playerName = playerName;
         data.points = points;
+        data.highscoreText = highscoreText;
 
         string json = JsonUtility.ToJson(data);
 
@@ -63,16 +64,16 @@ public class PassData : MonoBehaviour
     }
     public void LoadAll()
     {
-        string path = Application.persistentDataPath + "savefile.json";
+        string path = Application.persistentDataPath + "/savefile.json";
         if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
 
             playerName = data.playerName;
-            points = data.points;   
+            points = data.points;
 
-            highscoreText = "Best Score : " + data.playerName + " : " + data.points;
+            highscoreText = data.highscoreText;
         }
     }
 }

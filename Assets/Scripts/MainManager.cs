@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class MainManager : MonoBehaviour
 {
+    public string newName;
 
     public Brick BrickPrefab;
     public int LineCount = 6;
@@ -23,7 +24,6 @@ public class MainManager : MonoBehaviour
 
     void Start()
     {
-        PassData.instance.LoadAll();
         HighScoreText.text = PassData.instance.highscoreText;
 
         const float step = 0.6f;
@@ -40,6 +40,12 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
+
+        
+        PassData.instance.LoadAll();
+        HighScoreText.text = PassData.instance.highscoreText;
+
+        Debug.Log(PassData.instance.points + " " + PassData.instance.playerName);
     }
 
     private void Update()
@@ -79,6 +85,8 @@ public class MainManager : MonoBehaviour
 
         UpdateHighScore();
 
+        PassData.instance.highscoreText = HighScoreText.text;
+
         PassData.instance.SaveAll();
     }
 
@@ -88,8 +96,9 @@ public class MainManager : MonoBehaviour
        if(m_Points > PassData.instance.points)
        {
             PassData.instance.points = m_Points;
+            PassData.instance.playerName = PassData.instance.newName;
        }
-
+       
         HighScoreText.text = "Best Score: " + PassData.instance.playerName + " : " + PassData.instance.points;
     }
 }
